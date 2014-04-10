@@ -22,7 +22,7 @@ import sklearn
 
 
 # 1. Load data
-review = tp.get_excel_data("D:/code/sentiment_test/review_set.xlsx", "1", "1")
+review = tp.get_excel_data("D:/code/sentiment_test/review_set.xlsx", "1", "1", "data")
 sentiment_review = tp.seg_fil_senti_excel("D:/code/sentiment_test/review_set.xlsx", "1", "1")
 
 
@@ -97,8 +97,8 @@ for i in pred:
 
 for r in review[:2]:
     print r
-    print "pos probability score: %f" %pred2[toydata.index(r)][0]
-    print "neg probability score: %f" %pred2[toydata.index(r)][1]
+    print "pos probability score: %f" %pred2[review.index(r)][0]
+    print "neg probability score: %f" %pred2[review.index(r)][1]
     print
 
     
