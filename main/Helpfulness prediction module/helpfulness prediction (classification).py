@@ -91,7 +91,7 @@ clf = svm.SVC(gamma=0.001, C=100.)
 
 
 # 4. Cross validate classifier's accuracy
-k_fold = cross_validation.KFold(len(x), n_folds=10)
+k_fold = cross_validation.KFold(len(helpfulness_feature), n_folds=10)
 clf_accuracy = cross_validation.cross_val_score(clf, x, y, cv=k_fold)
 print clf_accuracy.mean()
 
