@@ -27,8 +27,8 @@ from sklearn.metrics import accuracy_score
 
 
 # 1. Load positive and negative review data
-pos_review = tp.seg_fil_senti_excel("D:/code/sentiment_test/pos_review.xlsx", "1", "1")
-neg_review = tp.seg_fil_senti_excel("D:/code/sentiment_test/neg_review.xlsx", "1", "1")
+pos_review = tp.seg_fil_senti_excel("D:/code/sentiment_test/pos_review.xlsx", 1, 1)
+neg_review = tp.seg_fil_senti_excel("D:/code/sentiment_test/neg_review.xlsx", 1, 1)
 
 pos = pos_review
 neg = neg_review
@@ -69,8 +69,8 @@ def bigram_words(words, score_fn=BigramAssocMeasures.chi_sq, n=200):
 # 2.4 Use chi_sq to find most informative features of the review
 # 2.4.1 First we should compute words or bigrams information score
 def create_word_scores():
-    posdata = tp.seg_fil_senti_excel("D:/code/sentiment_test/pos_review.xlsx", "1", "1")
-    negdata = tp.seg_fil_senti_excel("D:/code/sentiment_test/neg_review.xlsx", "1", "1")
+    posdata = tp.seg_fil_senti_excel("D:/code/sentiment_test/pos_review.xlsx", 1, 1)
+    negdata = tp.seg_fil_senti_excel("D:/code/sentiment_test/neg_review.xlsx", 1, 1)
     
     posWords = list(itertools.chain(*posdata))
     negWords = list(itertools.chain(*negdata))
@@ -97,8 +97,8 @@ def create_word_scores():
     return word_scores
 
 def create_bigram_scores():
-    posdata = tp.seg_fil_senti_excel("D:/code/sentiment_test/pos_review.xlsx", "1", "1")
-    negdata = tp.seg_fil_senti_excel("D:/code/sentiment_test/neg_review.xlsx", "1", "1")
+    posdata = tp.seg_fil_senti_excel("D:/code/sentiment_test/pos_review.xlsx", 1, 1)
+    negdata = tp.seg_fil_senti_excel("D:/code/sentiment_test/neg_review.xlsx", 1, 1)
     
     posWords = list(itertools.chain(*posdata))
     negWords = list(itertools.chain(*negdata))
@@ -134,8 +134,8 @@ def create_bigram_scores():
 
 # Combine words and bigrams and compute words and bigrams information scores
 def create_word_bigram_scores():
-    posdata = tp.seg_fil_senti_excel("D:/code/sentiment_test/pos_review.xlsx", "1", "1")
-    negdata = tp.seg_fil_senti_excel("D:/code/sentiment_test/neg_review.xlsx", "1", "1")
+    posdata = tp.seg_fil_senti_excel("D:/code/sentiment_test/pos_review.xlsx", 1, 1)
+    negdata = tp.seg_fil_senti_excel("D:/code/sentiment_test/neg_review.xlsx", 1, 1)
     
     posWords = list(itertools.chain(*posdata))
     negWords = list(itertools.chain(*negdata))
@@ -232,6 +232,37 @@ negFeatures = neg_features(best_word_features)
 
 
 # 4. Train classifier and examing classify accuracy
+# Make the feature set ramdon
+shuffle(posFeatures)
+shuffle(negFeatures)
+
+# 75% of features used as training set (in fact, it have a better way by using cross validation function)
+size_pos = int(len(pos_review) * 0.75)
+size_neg = int(len(neg_review) * 0.75)
+
+train_set = posFeatures[:size_pos] + negFeatures[:size_neg]
+test_set = posFeatures[size_pos:] + negFeatures[size_neg:]
+
+test, tag_test = zip(*test_set)
+
+def clf_score(classifier):
+    classifier = SklearnClassifier(classifier)
+    classifier.train(train_set)
+
+    predict = classifier.batch_classify(test)
+    return accuracy_score(tag_test, predict)
+
+print 'BernoulliNB`s accuracy is %f' %clf_score(BernoulliNB())
+print 'GaussianNB`s accuracy is %f' %clf_score(GaussianNB())
+print 'MultinomiaNB`s accuracy is %f' %clf_score(MultinomialNB())
+print 'LogisticRegression`s accuracy is %f' %clf_score(LogisticRegression())
+print 'SVC`s accuracy is %f' %clf_score(SVC(gamma=0.001, C=100., kernel='linear'))
+print 'LinearSVC`s accuracy is %f' %clf_score(LinearSVC())
+print 'NuSVC`s accuracy is %f' %clf_score(NuSVC())
+
+
+
+# 5. After finding the best classifier, then check different dimension classification accuracy
 def score(classifier):
     classifier = SklearnClassifier(classifier)
     classifier.train(trainset)
@@ -239,17 +270,6 @@ def score(classifier):
     pred = classifier.batch_classify(test)
     return accuracy_score(tag_test, pred)
 
-print 'BernoulliNB`s accuracy is %f' %score(BernoulliNB())
-print 'GaussianNB`s accuracy is %f' %score(GaussianNB())
-print 'MultinomiaNB`s accuracy is %f' %score(MultinomialNB())
-print 'LogisticRegression`s accuracy is %f' %score(LogisticRegression())
-print 'SVC`s accuracy is %f' %score(SVC(gamma=0.001, C=100., kernel='linear'))
-print 'LinearSVC`s accuracy is %f' %score(LinearSVC())
-print 'NuSVC`s accuracy is %f' %score(NuSVC())
-
-
-
-# 5. After finding the best classifier, then check different dimension classification accuracy
 dimention = ['500','1000','1500','2000','2500','3000']
 
 for d in dimention:

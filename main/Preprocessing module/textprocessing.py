@@ -173,7 +173,7 @@ output: A multidimentional list of reviews
 def seg_fil_excel(filepath, sheetnum, colnum):
     # Read product review data from excel file and segment every review
     review_data = []
-    for cell in tp.get_excel_data(filepath, sheetnum, colnum, 'data')[0:get_excel_data(filepath, sheetnum, colnum, 'rownum')]:
+    for cell in get_excel_data(filepath, sheetnum, colnum, 'data')[0:get_excel_data(filepath, sheetnum, colnum, 'rownum')]:
         review_data.append(segmentation(cell, 'list')) # Seg every reivew
     
     # Read txt file contain stopwords
@@ -203,7 +203,7 @@ output: A multidimentional list of reviews, use different stopword list, so it w
 def seg_fil_senti_excel(filepath, sheetnum, colnum):
     # Read product review data from excel file and segment every review
     review_data = []
-    for cell in tp.get_excel_data(filepath, sheetnum, colnum, 'data')[0:get_excel_data(filepath, sheetnum, colnum, 'rownum')]:
+    for cell in get_excel_data(filepath, sheetnum, colnum, 'data')[0:get_excel_data(filepath, sheetnum, colnum, 'rownum')]:
         review_data.append(segmentation(cell, 'list')) # Seg every reivew
     
     # Read txt file contain sentiment stopwords
