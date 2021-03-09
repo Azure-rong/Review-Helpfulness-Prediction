@@ -51,3 +51,6 @@ Using Python scikit-learn library to train classifier and evaluated classifier p
 
 ***Files include:***<br />
 - Feature vector matrix with different threshold.<br />
+
+## Paper
+聂卉 & 容哲.(2015).[面向评论效用评估的文本情感特征提取](https://kns.cnki.net/kcms/detail/detail.aspx?dbcode=CJFD&dbname=CJFDLAST2015&filename=XDTQ2015Z1022). *现代图书情报技术*(Z1),113-121. doi:CNKI:SUN:XDTQ.0.2015-Z1-022.
